@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <script type="text/javascript" src="functions_en.js"></script>
+        <meta charset="utf-8">
+        <title>Term paper</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <!-- Header -->
+        <div class="container">
+            <div class="text-center">
+                <label class="label">
+                    <div class="label-text-left">Ru</div>
+                   <div class="toggle">
+                     <input class="toggle-state" type="checkbox" name="check" value="en" onclick="toggle(value)"/>
+                     
+                     <div class="indicator-right"></div>
+                   </div>
+                   <div class="label-text-right">En</div>
+                </label> 
+                <h1 class="h2">Measure the readability of the text</h1>
+            </div>
+        </div>
+        <div class="container">            
+            <div class="text" id="text">
+                <textarea id="textArea" class="text" rows="8" autofocus placeholder="Type your text or drag and drop your file"></textarea>
+            </div>
+            <input id = "files" type="file" accept="text/plain">
+            <script type="text/javascript">
+                if (document.getElementById('textArea').value == "")
+                    initFileLoader();
+            </script>
+            <div class = "text" id="button">
+                <button type="button" class ="button" id="textBtn" data-var="text" data-loading-text="..Loading..">Analyze</button>
+                <button type="button" class ="red button" id="clearBtn" data-var="text" data-loading-text="..Loading.." style="display: none;">Clear</button>   
+            </div>
+            <script type="text/javascript">
+                document.getElementById('textBtn').addEventListener('click',function(){
+                    if (countParameters(document.getElementById('textArea').value))
+                     {
+                        document.getElementById('summary').style.display='block';
+                        document.getElementById('metrics').style.display='block';
+                        document.getElementById('numbers').style.display='block';
+                        document.getElementById('averages').style.display='block';
+                        document.getElementById('time').style.display='block';
+                        document.getElementById('error').style.display='none';
+                     }
+                     else
+                     {
+                        document.getElementById('summary').style.display='none';
+                        document.getElementById('metrics').style.display='none';
+                        document.getElementById('numbers').style.display='none';
+                        document.getElementById('averages').style.display='none';
+                        document.getElementById('time').style.display='none';
+                        document.getElementById('error').style.display='block';
+                     }
+                     document.getElementById("clearBtn").style.display='inline-block';
+                },false);
+                document.getElementById('clearBtn').addEventListener('click', function(){
+                    document.getElementById('textArea').value="";
+                    document.getElementById('summary').style.display='none';
+                    document.getElementById('metrics').style.display='none';
+                    document.getElementById('numbers').style.display='none';
+                    document.getElementById('averages').style.display='none';
+                    document.getElementById('time').style.display='none';
+                    document.getElementById('error').style.display='none';
+                    document.getElementById("clearBtn").style.display='none';
+                });
+            </script>
+            <div class="error" id="error">
+            </div>
+            <div class="results row" id="summary">
+                <div class="metrics heading">
+                    <span>Readability grade : </span>
+                </div> 
+                <span class="metrics value" id="all_indices"></span>
+                <div class="progress">
+                    <div class="progress-value"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="results column left" id="numbers">
+                    <div class="metrics numbers heading">
+                        <span>Text statistics</span>
+                    </div>          
+                    <div class="metrics numbers">
+                        <span class ="metrics">Symbol Count: </span>
+                        <strong class="metrics value" id="numberOfChars"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Space Count: </span>
+                        <strong class="metrics value" id="numberOfSpaces"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Character Count: </span>
+                        <strong class="metrics value" id="numberOfLetters"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Syllable Count: </span>
+                        <strong class="metrics value" id="numberOfSyllabes"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Word Count: </span>
+                        <strong class="metrics value" id="numberOfWords"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class ="metrics">Sentence Count: </span>
+                        <strong class="metrics value" id="numberOfSentences"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class ="metrics">Paragraph Count: </span>
+                        <strong class="metrics value" id="numberOfParagraphs"></strong>
+                    </div>
+                </div>
+                <div class="results column right" id="metrics">
+                    <div class="metrics numbers heading">
+                        <span>Readability Grade Levels</span>
+                    </div>
+                    <div class="metrics indices">
+                        <a href="https://en.wikipedia.org/wiki/SMOG" target="_blank"> <span class="metrics">SMOG</span> </a>
+                        <span> =</span>
+                        <strong class="metrics value" id="SMOG"></strong>
+                    </div>
+                    <div class="metrics indices">
+                        <a href="https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_tests" target="_blank"> <span class="metrics">Flesch-Kincaid Level</span> </a>
+                        <span> = </span>
+                        <strong class="metrics value" id="FleschKincaidLevel"></strong>
+                    </div>
+                    <div class="metrics indices">
+                        <a href="https://en.wikipedia.org/wiki/Coleman–Liau_index" target="_blank"> <span class="metrics">Coleman-Liau</span> </a>
+                        <span> =</span>
+                        <strong class="metrics value"  id="ColemanLiau"></strong>
+                    </div>
+                    <div class="metrics indices">
+                        <a href="https://en.wikipedia.org/wiki/Dale–Chall_readability_formula" target="_blank"> <span class="metrics">Dale-Chall</span> </a>
+                        <span> =</span>
+                        <strong class="metrics value" id="DaleChall"></strong>
+                    </div>
+                    <div class="metrics indices">
+                        <a href="https://en.wikipedia.org/wiki/Automated_readability_index" target="_blank"> <span class="metrics">ARI</span> </a>
+                        <span> =</span>
+                        <strong class="metrics value" id="ARI"></strong>
+                    </div>
+                    <div class="metrics indices">
+                        <a href="https://en.wikipedia.org/wiki/Gunning_fog_index" target="_blank"> <span class="metrics">Gunning Fog</span> </a>
+                        <span> =</span>
+                        <strong class="metrics value" id="GunningFog"></strong>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="results column left" id="averages">
+                    <div class="metrics numbers heading">
+                        <span>Text Density</span>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Characters per Word: </span>
+                        <strong class="metrics value" id="averageLettersInWord"></strong>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Syllables per Word: </span>
+                        <strong class="metrics value" id="averageSyllabesInWord"></strong>
+                    </div> 
+                    <div class="metrics numbers">
+                        <span class="metrics">Words per Sentence: </span>
+                        <strong class="metrics value" id="averageWordsInSentence"></strong>
+                    </div>
+                </div>
+                <div class="results column right" id="time">
+                    <div class="metrics numbers heading">
+                        <span>Timings</span>
+                    </div>
+                    <div class="metrics numbers">
+                        <span class="metrics">Reading Time: </span>
+                        <strong class="metrics value" id="readingTime"></strong>
+                    </div> 
+                    <div class="metrics numbers">
+                        <span class="metrics">Speaking Time: </span>
+                        <strong class="metrics value" id="speakingTime"></strong>
+                    </div>
+                </div>    
+                
+                <!-- <div class="metrics numbers">
+                    <span class="metrics">Количество простых слов = </span>
+                    <strong class="metrics value" id="numberOfSimpleWords"></strong>
+                </div>
+                <div class="metrics numbers">
+                    <span class="metrics">Количество сложных слов = </span>
+                    <strong class="metrics value" id="numberOfComplexWords"></strong>
+                </div> 
+                
+                <div class="metrics numbers">
+                    <span class="metrics">Процент сложных слов = </span>
+                    <strong class="metrics value" id="complexWords"></strong>
+                </div>-->
+            </div>
+    </div>
+    </body>
+</html>
